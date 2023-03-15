@@ -1,6 +1,6 @@
 const { REST, Routes } = require('discord.js');
 const { clientId, guildId, token } = require('./config.json');
-require('dotenv').config()
+const { env } = require('./dotenv.js');
 
 const commands = [];
 // Grab all the command files from the commands directory you created earlier
@@ -13,7 +13,7 @@ for (const file of commandFiles) {
 }
 
 // Construct and prepare an instance of the REST module
-const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
+const rest = new REST({ version: '10' }).setToken(env("DISCORD_TOKEN"));
 
 // and deploy your commands!
 (async () => {
