@@ -4,13 +4,13 @@ const prisma = new PrismaClient()
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('riddle')
-		.setDescription('Ask a random riddle.'),
+		.setName('question')
+		.setDescription('Ask a random question.'),
 	async execute(interaction) {
 		// run inside `async` function
-	        const questionsCount = await prisma.riddle.count();
+	        const questionsCount = await prisma.question.count();
 	        const skip = Math.floor(Math.random() * questionsCount);
-	        questionObj =  await prisma.riddle.findFirst({
+	        questionObj =  await prisma.question.findFirst({
 	                skip: skip,
 	                include: {
 	                        author: true,
@@ -22,10 +22,10 @@ module.exports = {
 
 		const exampleEmbed = new EmbedBuilder()
 			.setColor(0x0099FF)
-			.setTitle('Riddle')
+			.setTitle('Question')
 			.setDescription(question)
-			.setFooter({ text: 'Riddle provided by ' + authorName });
+			.setFooter({ text: 'Question provided by ' + authorName });
 
 		await interaction.reply({ content: '@DeadChat', embeds: [exampleEmbed] });
-	},
+	}
 };
