@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
-const { username, token, defaultModel, openaiKey, clientId } = require('./config.json');
+require('dotenv').config()
 
 // Initialize the Discord client
 const client = new Client({
@@ -48,13 +48,13 @@ client.on("interactionCreate", async interaction => {
 
 client.on('ready', () => {
   // Set the bot's presence
-  if( username != client.user.username) {
-    console.log("Changing username from "+client.user.username+" to "+username);
-    client.user.setUsername(username);
+  if( process.env.USERNAME != client.user.username) {
+    console.log("Changing username from "+client.user.username+" to "+process.env.USERNAME);
+    client.user.setUsername(process.env.USERNAME);
   }
-  client.user.setPresence({ activity: { name: 'Talking with OpenAI' } });
+  client.user.setPresence({ activity: { name: 'Preparing riddles...' } });
   console.log("Logged in");
 });
 
 // Log in to Discord using the client ID and secret
-client.login(token);
+client.login(process.env.DISCORD_TOKEN);
