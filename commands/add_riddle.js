@@ -14,12 +14,24 @@ module.exports = {
 			option.setName('answer')
 			      .setDescription('The answer to the given riddle')
 			      .setRequired(true))
-		.addUserOption(option => option.setName('user').setDescription('The user who provided the riddle')),
+		.addStringOption(option =>
+			option.setName('list-id')
+			      .setDescription('The ID for the list to add the riddle to')
+			      .setRequired(true))
+                .addUserOption(option => option.setName('user').setDescription('The user who provided the riddle')),
+
 	async execute(interaction) {
 
 		const source = interaction.options.getUser('user');
 		const riddle = interaction.options.getString('riddle');
 		const answer = interaction.options.getString('answer');
+                const listSlug = interaction.options.getString('list-id');
+
+                const list = await prisma.list.findUnique({
+                  where: {
+                    slug: listSlug,
+                  },
+                })
 
 		const user = await prisma.user.upsert({
 		  where: {
@@ -37,7 +49,7 @@ module.exports = {
 		    authorId: user.id,
 		    question: riddle,
 		    answer: answer,
-		    active: true,
+		    listId: list.id,
 		  },
 		})
 

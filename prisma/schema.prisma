@@ -15,31 +15,48 @@ model User {
   createdAt DateTime @default(now())
   email     String?
   discordId String   @unique
-  name      String?
+  name      String
   role      Role     @default(USER)
   questions Question[]
   riddles   Riddle[]
+  lists     List[]
+}
+
+model List {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  slug      String   @unique
+  active    Boolean  @default(true)
+  title     String
+  owner     User     @relation(fields: [ownerId], references: [id])
+  ownerId   Int
+  riddles   Riddle[]
+  questions Question[]
 }
 
 model Question {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  active    Boolean  @default(false)
+  active    Boolean  @default(true)
   question  String   @db.VarChar(255)
-  author    User?    @relation(fields: [authorId], references: [id])
-  authorId  Int?
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+  list      List     @relation(fields: [listId], references: [id])
+  listId    Int
 }
 
 model Riddle {
   id	    Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  active    Boolean  @default(false)
+  active    Boolean  @default(true)
   question  String   @db.VarChar(255)
   answer    String   @db.VarChar(255)
-  author    User?    @relation(fields: [authorId], references: [id])
-  authorId  Int?
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+  list      List     @relation(fields: [listId], references: [id])
+  listId    Int
 }
 
 enum Role {

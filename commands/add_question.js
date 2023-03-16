@@ -10,11 +10,23 @@ module.exports = {
 			option.setName('question')
 			      .setDescription('The question to ask')
 			      .setRequired(true))
-		.addUserOption(option => option.setName('user').setDescription('The user who provided the riddle')),
+                .addStringOption(option =>
+                        option.setName('list-id')
+                              .setDescription('The ID for the list to add the riddle to. (/list-lists)')
+			      .setRequired(true))
+                .addUserOption(option => option.setName('user').setDescription('The user who provided the riddle')),
+
 	async execute(interaction) {
 
 		const source = interaction.options.getUser('user');
 		const question = interaction.options.getString('question');
+		const listSlug = interaction.options.getString('list-id');
+
+		const list = await prisma.list.findUnique({
+		  where: {
+		    slug: listSlug,
+		  },
+		})
 
 		const user = await prisma.user.upsert({
 		  where: {
@@ -31,7 +43,7 @@ module.exports = {
 		  data: {
 		    authorId: user.id,
 		    question: question,
-		    active: true,
+		    listId: list.id,
 		  },
 		})
 

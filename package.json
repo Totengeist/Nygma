@@ -19,7 +19,9 @@
   "dependencies": {
     "@prisma/client": "^4.11.0",
     "discord.js": "^14.8.0",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "fix-esm": "^1.0.1",
+    "nanoid": "^4.0.1"
   },
   "devDependencies": {
     "prisma": "^4.11.0"
